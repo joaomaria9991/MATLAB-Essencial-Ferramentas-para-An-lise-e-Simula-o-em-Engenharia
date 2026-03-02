@@ -1,0 +1,54 @@
+%% Caso Prático — Farmacocinética (modelo 1-compartimento)
+% dC/dt = -k*C,  C(0) = C0
+% Script completo para correr no MATLAB
+
+clear;
+close all;
+clc;
+
+%% Parâmetros (podes ajustar)
+C0 = 10;          % mg/L
+k  = 0.4;         % 1/h
+tspan = [0 24];   % horas
+
+%% Resolver ODE (ode45)
+odefun = @(t,C) -k*C;
+
+opts = odeset('RelTol',1e-6,'AbsTol',1e-9);
+[t,C] = ode45(odefun, tspan, C0, opts);
+
+%% (Opcional) Solução analítica para comparar
+C_analitica = C0 * exp(-k*t);
+
+%% Plot
+figure('Color','w');
+plot(t, C, 'b-', 'LineWidth', 2); hold on
+plot(t, C_analitica, 'r--', 'LineWidth', 2); hold off
+
+title('Farmacocinética — Modelo Monocompartimental (IV)')
+xlabel('Tempo (h)')
+ylabel('Concentração C(t) (mg/L)')
+legend('ode45 (numérico)','Solução analítica','Location','northeast')
+grid on
+
+%% Métricas úteis (meia-vida, etc.)
+t_half = log(2)/k;                % h
+C_24 = interp1(t, C, 24);         % mg/L (no fim)
+fprintf("k = %.3f 1/h\n", k);
+fprintf("Meia-vida t1/2 = %.3f h\n", t_half);
+fprintf("C(24h) ≈ %.6f mg/L\n", C_24);
+
+%% Explorar o efeito de k (extra rápido para demo)
+k_list = [0.2 0.4 0.8];  % 1/h
+
+figure('Color','w');
+for kk = k_list
+    [t2,C2] = ode45(@(t,C) -kk*C, tspan, C0, opts);
+    plot(t2, C2, 'LineWidth', 2); hold on
+end
+hold off
+title('Efeito de k na eliminação')
+xlabel('Tempo (h)')
+ylabel('Concentração C(t) (mg/L)')
+legend("k=0.2","k=0.4","k=0.8",'Location','northeast')
+grid on
