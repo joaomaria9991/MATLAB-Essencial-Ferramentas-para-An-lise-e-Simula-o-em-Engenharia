@@ -9,7 +9,7 @@ C0 = 10;          % mg/L
 k  = 0.4;         % 1/h
 tspan = [0 24];   % horas
 
-t_plot = tspan(1):0.001:tspan(2);
+t_plot = tspan(1):0.001:tspan(end);
 
 %% Solver settings
 opts = odeset('RelTol',1e-6,'AbsTol',1e-9);
@@ -44,11 +44,10 @@ for kk = k_list
     [t2,C2] = ode45(@(t,C) -kk*C, tspan, C0, opts);
     plot(t2, C2, 'LineWidth', 2);
 end
-hold off
 
 title('Efeito de k na eliminação')
 xlabel('Tempo (h)')
 ylabel('Concentração C(t) (mg/L)')
-legend("k=0.2","k=0.4","k=0.8",'Location','northeast')
+legend("k=0.2","k=0.4","k=0.8",'Location','best')
 grid on
 
