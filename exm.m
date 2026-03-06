@@ -1,4 +1,4 @@
-%% Farmacocinética — gerar plots para slides
+%% Farmacocinética
 
 clear;
 close all;
@@ -9,7 +9,6 @@ C0 = 10;          % mg/L
 k  = 0.4;         % 1/h
 tspan = [0 24];   % horas
 
-% Para curvas mais suaves no plot (apenas para visualização)
 t_plot = tspan(1):0.001:tspan(2);
 
 %% Solver settings
@@ -27,7 +26,7 @@ fig1 = figure('Color','w','Position',[100 100 900 550]);
 plot(t, C, 'LineWidth', 2); hold on
 plot(t_plot, C_ana, '--', 'LineWidth', 2); hold off
 
-title('Farmacocinética — Modelo Monocompartimental (IV)')
+title('Farmacocinética — Modelo Monocompartimental')
 xlabel('Tempo (h)')
 ylabel('Concentração C(t) (mg/L)')
 legend('ode45 (numérico)','Solução analítica','Location','northeast')
